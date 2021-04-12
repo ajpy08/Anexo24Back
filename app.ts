@@ -1,3 +1,9 @@
-export const nombre = 'Javi';
+import dotenv from 'dotenv';
+import Server from './models/server';
 
-console.log(nombre);
+// configurar dot.env
+dotenv.config();
+
+const server = new Server();
+
+server.listen();
