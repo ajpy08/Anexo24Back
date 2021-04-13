@@ -95,7 +95,7 @@ export const deleteUsuario = async (req: Request, res: Response) => {
 
     // await usuario?.destroy()
 
-    await usuario?.update({ estado: false});
+    await usuario?.update({ estado: false });
 
     res.json({
         usuario

@@ -1,7 +1,7 @@
 import express, { Application } from 'express'
 import userRoutes from '../routes/usuario';
 import cors from 'cors'
-import db from '../db/connetion';
+import db from '../db/connection';
 
 class Server {
     private app: Application;
@@ -20,10 +20,10 @@ class Server {
         this.routes();
     }
 
-    async dbConnection(){
+    async dbConnection() {
         try {
             await db.authenticate();
-            console.log('Database online');
+            console.log('Database Online');
         } catch (error) {
             throw new Error(error);
         }
