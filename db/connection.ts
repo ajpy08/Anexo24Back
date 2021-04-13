@@ -1,10 +1,11 @@
 import {Sequelize} from 'sequelize';
+import config from '../config/config.json';
 
-const db = new Sequelize('anexo24', 'root', 'fmat*0348', {
-    host: 'localhost',
+const db = new Sequelize(config.db.DATABASE_NAME, config.db.DATABASE_USER, config.db.DATABASE_PASSWORD, {
+    host: config.db.DATABASE_HOST,
     dialect: 'mysql',
     // logging: false,
-    port: 3307
+    port: config.db.DATABASE_PORT
 });
 
 export default db;
