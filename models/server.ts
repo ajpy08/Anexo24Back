@@ -1,5 +1,5 @@
 import express, { Application } from 'express'
-import userRoutes from '../routes/usuario';
+import userRoutes from '../routes/user';
 import authRoutes from '../routes/auth';
 import cors from 'cors'
 import db from '../db/connection';
@@ -8,7 +8,7 @@ class Server {
     private app: Application;
     private port: string;
     private apiPaths = {
-        usuarios: '/api/usuarios',
+        usuarios: '/api/users',
         auth: '/api/auth'
     }
 
@@ -25,7 +25,7 @@ class Server {
     async dbConnection() {
         try {
             await db.authenticate();
-            console.log('Database online');
+            console.log('Database Online');
         } catch (error) {
             throw new Error(error);
         }
