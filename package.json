@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"tsc -w\" \"nodemon dist/app.js\"",
+    "debug": "node --inspect dist/app.js",
     "start_production": "set NODE_ENV=production&& nodemon dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

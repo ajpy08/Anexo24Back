@@ -1,15 +1,18 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { User } from "../models/user";
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
-export const getUsers = async (req: Request, res: Response) => {
+export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const users = await User.findAll();
 
-    const users = await User.findAll();
-
-    res.json({
-        users
-    });
+        res.status(200).json({
+            users,
+            total: users.length
+        });
+    } catch (error) {
+        next(error);
+    }
 }
 
 export const getUser = async (req: Request, res: Response) => {
@@ -23,7 +26,7 @@ export const getUser = async (req: Request, res: Response) => {
         });
     }
 
-    res.json({
+    res.status(200).json({
         user
     });
 }
@@ -50,7 +53,7 @@ export const postUser = async (req: Request, res: Response) => {
         const user = User.build(body);
         await user.save();
 
-        res.json({
+        res.status(200).json({
             user
         });
     } catch (error) {
@@ -76,7 +79,7 @@ export const putUser = async (req: Request, res: Response) => {
 
         await user.update(body);
 
-        res.json({
+        res.status(200).json({
             user
         });
 
@@ -103,51 +106,8 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     await user?.update({ estado: false });
 
-    res.json({
+    res.status(200).json({
         user
-    });
-}
-
-export const signin = async (req: Request, res: Response) => {
-    const { body } = req;
-
-    const user = await User.findOne({
-        where: {
-            email: body.email
-        }
-    });
-
-    if (!user) {
-        res.status(404).json({
-            msg: `No existe un usuario ${body.email}`
-        });
-    }
-
-    if (user?.estado === false) {
-        return res.status(400).json({
-            ok: false,
-            mensaje: 'El user se encuentra deshabilitado'
-        });
-    }
-
-    if (user) {
-        if (!bcrypt.compareSync(body.password, user.password)) {
-            return res.status(400).json({
-                ok: false,
-                mensaje: 'Credenciales incorrectas'
-            });
-        }
-        user.password = '=)';
-    }
-
-    // token
-    const token: string = jwt.sign({ user }, process.env.TOKEN_SECRET || 'tokentest', {
-        expiresIn: 86400 // 24 hours
-    });
-
-    res.json({
-        user,
-        token
     });
 }
 

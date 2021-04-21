@@ -12,6 +12,7 @@ export interface UserAddModel {
 
 export interface UserModel extends Model<UserModel, UserAddModel> {
     id: number
+    nombre: string
     email: string
     password: string
     estado: boolean

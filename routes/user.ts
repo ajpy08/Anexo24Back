@@ -1,13 +1,13 @@
-import { deleteUser, getUser, getUsers, postUser, putUser, signin } from '../controllers/users';
+import { deleteUser, getUser, getUsers, postUser, putUser } from '../controllers/users';
 import { Router } from 'express';
+import { verifyToken } from '../controllers/auth';
 
 const router = Router();
 
-router.get('/login/', signin);
-router.get('/', getUsers);
-router.get('/:id', getUser);
-router.post('/', postUser);
-router.put('/:id', putUser);
-router.delete('/:id', deleteUser);
+router.get('/', verifyToken, getUsers);
+router.get('/:id', verifyToken, getUser);
+router.post('/', verifyToken, postUser);
+router.put('/:id', verifyToken, putUser);
+router.delete('/:id', verifyToken, deleteUser);
 
 export default router;
