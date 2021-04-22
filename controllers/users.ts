@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { User } from "../models/user";
 import bcrypt from 'bcryptjs';
 
-export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+export const getUsers = async (req: Request, res: Response) => {
     try {
         const users = await User.findAll();
 
@@ -11,24 +11,31 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
             total: users.length
         });
     } catch (error) {
-        next(error);
+        res.status(500).json({
+            msg: `Ocurrio un error ${error}`
+        });
     }
 }
 
 export const getUser = async (req: Request, res: Response) => {
     const { id } = req.params;
+    try {
+        const user = await User.findByPk(id);
 
-    const user = await User.findByPk(id);
+        if (!user) {
+            res.status(404).json({
+                msg: `No existe un usuario con el id ${id}`
+            });
+        }
 
-    if (!user) {
-        res.status(404).json({
-            msg: `No existe un usuario con el id ${id}`
+        res.status(200).json({
+            user
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg: `Ocurrio un error ${error}`
         });
     }
-
-    res.status(200).json({
-        user
-    });
 }
 
 export const postUser = async (req: Request, res: Response) => {
@@ -57,9 +64,8 @@ export const postUser = async (req: Request, res: Response) => {
             user
         });
     } catch (error) {
-        console.log(error);
         res.status(500).json({
-            msg: 'Hable con el administrador'
+            msg: `Ocurrio un error ${error}`
         });
     }
 }
@@ -84,9 +90,8 @@ export const putUser = async (req: Request, res: Response) => {
         });
 
     } catch (error) {
-        console.log(error);
         res.status(500).json({
-            msg: 'Hable con el administrador'
+            msg: `Ocurrio un error ${error}`
         });
     }
 }

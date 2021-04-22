@@ -1,8 +1,9 @@
+import { Empresa } from './empresa';
 // import * as Sequelize from 'sequelize'
-import { DataTypes, Model } from 'sequelize'
+import { DataTypes, DateDataType, Model } from 'sequelize'
 import db from '../db/connection';
 
-export interface UserAddModel {
+export interface UserAttributes {
     id: number
     nombre: string
     email: string
@@ -10,7 +11,7 @@ export interface UserAddModel {
     estado: boolean
 }
 
-export interface UserModel extends Model<UserModel, UserAddModel> {
+export interface UserModel extends Model<UserModel, UserAttributes> {
     id: number
     nombre: string
     email: string
@@ -25,14 +26,23 @@ export interface UserViewModel {
     email: string
 }
 
-export const User = db.define<UserModel, UserAddModel>('user', {
+export const User = db.define<UserModel, UserAttributes>('user', {
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         autoIncrement: true,
         primaryKey: true
     },
-    nombre: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
+    nombre: { type: DataTypes.STRING(100), allowNull: false },
+    email: { type: DataTypes.STRING(50), allowNull: false, unique: true },
+    password: { type: DataTypes.STRING, allowNull: false },
     estado: DataTypes.BOOLEAN
-})
+});
+
+// User.hasMany(Empresa);
+// Empresa.belongsTo(User, {foreignKey: 'idUser', targetKey: 'id'});
+
+User.belongsToMany(Empresa, {
+    through: "user_empresa",
+    as: "empresas",
+    foreignKey: "idUser",
+});
