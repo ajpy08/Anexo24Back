@@ -30,8 +30,9 @@ export const Empresa = db.define<EmpresaInterface, EmpresaAttributes>('empresa',
     estado: DataTypes.BOOLEAN
 });
 
-// Empresa.belongsToMany(User, {
-//     through: "user_empresa",
-//     as: "users",
-//     foreignKey: "empresa_id",
+// Empresa.belongsToMany(User, { through: 'user_empresa' });
+
+// Empresa.belongsTo(User, {
+//     foreignKey: 'userId',
+//     as: 'user'
 //   });

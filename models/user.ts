@@ -1,6 +1,5 @@
 import { Empresa } from './empresa';
-// import * as Sequelize from 'sequelize'
-import { DataTypes, DateDataType, Model } from 'sequelize'
+import { DataTypes, Model } from 'sequelize'
 import db from '../db/connection';
 
 export interface UserAttributes {
@@ -38,11 +37,20 @@ export const User = db.define<UserModel, UserAttributes>('user', {
     estado: DataTypes.BOOLEAN
 });
 
-// User.hasMany(Empresa);
-// Empresa.belongsTo(User, {foreignKey: 'idUser', targetKey: 'id'});
+// User.belongsToMany(Empresa, { through: 'user_empresa' });
 
-User.belongsToMany(Empresa, {
-    through: "user_empresa",
-    as: "empresas",
-    foreignKey: "idUser",
+User.hasMany(Empresa, {
+    /*
+      You can omit the sourceKey property
+      since by default sequelize will use the primary key defined
+      in the model - But I like to be explicit
+    */
+    sourceKey: 'id',
+    foreignKey: 'userId',
+    as: 'empresas'
+});
+
+Empresa.belongsTo(User, {
+    foreignKey: 'userId',
+    as: 'user'
 });

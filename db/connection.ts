@@ -6,8 +6,8 @@ import { User } from '../models/user';
 const db = new Sequelize(config.db.DATABASE_NAME, config.db.DATABASE_USER, config.db.DATABASE_PASSWORD, {
     host: config.db.DATABASE_HOST,
     dialect: 'mysql',
-    // logging: false,
-    port: config.db.DATABASE_PORT
+    logging: true, // default true
+    port: config.db.DATABASE_PORT,
 });
 
 // Empresa.belongsToMany(User, {
