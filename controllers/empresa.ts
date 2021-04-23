@@ -42,7 +42,7 @@ export const getEmpresa = async (req: Request, res: Response) => {
         // });
 
         const empresa = await db.query(
-            'SELECT * FROM empresas WHERE id = :id',
+            'SELECT * FROM empresas WHERE empresaId = :id',
             {
                 replacements: { id: 1 },
                 type: QueryTypes.SELECT
@@ -52,6 +52,38 @@ export const getEmpresa = async (req: Request, res: Response) => {
         if (!empresa) {
             res.status(404).json({
                 msg: `No existe una empresa con el id ${id}`
+            });
+        }
+
+        res.status(200).json({
+            empresa
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg: `Ocurrio un error ${error}`
+        });
+    }
+}
+
+export const getEmpresasByUser = async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    console.log(req.params);
+    try {
+
+        const empresa = await db.query(
+            'SELECT empresas.* FROM empresas ' +
+            'INNER JOIN user_empresas USING (empresaId) ' +
+            'INNER JOIN users USING (userId) ' +
+            'WHERE users.userId = :userId',
+            {
+                replacements: { userId },
+                type: QueryTypes.SELECT
+            }
+        );
+
+        if (!empresa) {
+            res.status(404).json({
+                msg: `No existe una empresa para el usuario con id ${userId}`
             });
         }
 
@@ -92,9 +124,9 @@ export const postEmpresa = async (req: Request, res: Response) => {
         //     }
         // ).then((result) => {
         //     empresa.id = result[0];
-        //     res.status(200).json({
-        //         empresa
-        //     });
+        res.status(200).json({
+            empresa
+        });
         // });
     } catch (error) {
         res.status(500).json({

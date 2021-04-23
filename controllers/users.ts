@@ -1,3 +1,5 @@
+import { Empresa } from './../models/empresa';
+import { UserEmpresa } from './../models/userEmpresa';
 import { NextFunction, Request, Response } from "express";
 import { User } from "../models/user";
 import bcrypt from 'bcryptjs';
@@ -5,6 +7,21 @@ import bcrypt from 'bcryptjs';
 export const getUsers = async (req: Request, res: Response) => {
     try {
         const users = await User.findAll();
+
+        // const users = await User.findAll({
+        //     attributes: ['nombre', 'email'],
+        //     include: [
+        //         {
+        //             attributes: {
+        //                 // include: ['createdAt'],
+        //                 exclude: ['userId', 'empresaId', 'updatedAt']
+        //             },
+        //             model: UserEmpresa,
+        //             required: true,
+        //             include: [{ model: Empresa, required: true }]
+        //         }
+        //     ],
+        // });
 
         res.status(200).json({
             users,
@@ -58,10 +75,15 @@ export const postUser = async (req: Request, res: Response) => {
         }
 
         const user = User.build(body);
-        await user.save();
-
-        res.status(200).json({
-            user
+        await user.save().then((userAdd) => {
+            UserEmpresa.create({
+                userId: userAdd.userId,
+                empresaId: body.empresaId
+            }).then(() => {
+                res.status(200).json({
+                    user
+                });
+            });
         });
     } catch (error) {
         res.status(500).json({

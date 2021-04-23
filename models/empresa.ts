@@ -1,9 +1,10 @@
 import { DataTypes, Model } from 'sequelize'
 import db from '../db/connection';
 import { User } from './user';
+import { UserEmpresa } from './userEmpresa';
 
 export interface EmpresaAttributes {
-    id: number
+    empresaId: number
     rfc: string
     nombre: string
     estado: boolean
@@ -11,7 +12,7 @@ export interface EmpresaAttributes {
 
 
 export interface EmpresaInterface extends Model<EmpresaInterface, EmpresaAttributes> {
-    id: number
+    empresaId: number
     rfc: string
     nombre: string
     estado: boolean
@@ -20,7 +21,7 @@ export interface EmpresaInterface extends Model<EmpresaInterface, EmpresaAttribu
 }
 
 export const Empresa = db.define<EmpresaInterface, EmpresaAttributes>('empresa', {
-    id: {
+    empresaId: {
         type: DataTypes.UUID,
         autoIncrement: true,
         primaryKey: true
@@ -30,9 +31,7 @@ export const Empresa = db.define<EmpresaInterface, EmpresaAttributes>('empresa',
     estado: DataTypes.BOOLEAN
 });
 
-// Empresa.belongsToMany(User, { through: 'user_empresa' });
-
-// Empresa.belongsTo(User, {
-//     foreignKey: 'userId',
-//     as: 'user'
-//   });
+// Empresa.belongsTo(UserEmpresa, {
+//     foreignKey: 'empresaId',
+//     // as: 'user'
+// });

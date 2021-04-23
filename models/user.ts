@@ -1,9 +1,10 @@
+import { UserEmpresa } from './userEmpresa';
 import { Empresa } from './empresa';
 import { DataTypes, Model } from 'sequelize'
 import db from '../db/connection';
 
 export interface UserAttributes {
-    id: number
+    userId: number
     nombre: string
     email: string
     password: string
@@ -11,7 +12,7 @@ export interface UserAttributes {
 }
 
 export interface UserModel extends Model<UserModel, UserAttributes> {
-    id: number
+    userId: number
     nombre: string
     email: string
     password: string
@@ -21,12 +22,12 @@ export interface UserModel extends Model<UserModel, UserAttributes> {
 }
 
 export interface UserViewModel {
-    id: number
+    userId: number
     email: string
 }
 
 export const User = db.define<UserModel, UserAttributes>('user', {
-    id: {
+    userId: {
         type: DataTypes.UUID,
         autoIncrement: true,
         primaryKey: true
@@ -37,20 +38,7 @@ export const User = db.define<UserModel, UserAttributes>('user', {
     estado: DataTypes.BOOLEAN
 });
 
-// User.belongsToMany(Empresa, { through: 'user_empresa' });
-
-User.hasMany(Empresa, {
-    /*
-      You can omit the sourceKey property
-      since by default sequelize will use the primary key defined
-      in the model - But I like to be explicit
-    */
-    sourceKey: 'id',
+User.belongsTo(UserEmpresa, {
     foreignKey: 'userId',
-    as: 'empresas'
-});
-
-Empresa.belongsTo(User, {
-    foreignKey: 'userId',
-    as: 'user'
+    // as: 'user'
 });
