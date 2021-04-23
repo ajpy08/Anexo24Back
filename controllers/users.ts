@@ -3,6 +3,8 @@ import { UserEmpresa } from './../models/userEmpresa';
 import { NextFunction, Request, Response } from "express";
 import { User } from "../models/user";
 import bcrypt from 'bcryptjs';
+import * as Sequelize from 'sequelize'
+import db from '../db/connection';
 
 export const getUsers = async (req: Request, res: Response) => {
     try {
@@ -61,27 +63,61 @@ export const postUser = async (req: Request, res: Response) => {
         body.password = bcrypt.hashSync(body.password, 10);
     }
 
-    try {
-        const existEmail = await User.findOne({
-            where: {
-                email: body.email
-            }
-        });
+    // try {
+    //     const existEmail = await User.findOne({
+    //         where: {
+    //             email: body.email
+    //         }
+    //     });
 
-        if (existEmail) {
-            return res.status(400).json({
-                msg: `Ya existe un usuario con el email ${body.email}`
-            });
+    //     if (existEmail) {
+    //         return res.status(400).json({
+    //             msg: `Ya existe un usuario con el email ${body.email}`
+    //         });
+    //     }
+
+    //     const user = User.build(body);
+    //     await user.save().then((userAdd) => {
+    //         UserEmpresa.create({
+    //             userId: userAdd.userId,
+    //             empresaId: body.empresaId
+    //         }).then(() => {
+    //             res.status(200).json({
+    //                 user
+    //             });
+    //         });
+    //     });
+    // } catch (error) {
+    //     res.status(500).json({
+    //         msg: `Ocurrio un error ${error}`
+    //     });
+    // }
+
+    const existEmail = await User.findOne({
+        where: {
+            email: body.email
         }
+    });
 
-        const user = User.build(body);
-        await user.save().then((userAdd) => {
-            UserEmpresa.create({
-                userId: userAdd.userId,
-                empresaId: body.empresaId
-            }).then(() => {
-                res.status(200).json({
-                    user
+    if (existEmail) {
+        return res.status(400).json({
+            msg: `Ya existe un usuario con el email ${body.email}`
+        });
+    }
+
+    try {
+        const createdUser = await db.transaction(async t => {
+            const user = User.build(body);
+            await user.save({transaction: t}).then(async (userAdd) => {
+                const userEmpresa = UserEmpresa.build({
+                   userId: userAdd.userId,
+                   empresaId: body.empresaId
+                });
+
+                await userEmpresa.save({transaction: t}).then(() => {
+                    res.status(200).json({
+                        user
+                    });
                 });
             });
         });
