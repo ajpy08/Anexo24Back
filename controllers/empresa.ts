@@ -70,7 +70,7 @@ export const getEmpresasByUser = async (req: Request, res: Response) => {
     console.log(req.params);
     try {
 
-        const empresa = await db.query(
+        const empresas = await db.query(
             'SELECT empresas.* FROM empresas ' +
             'INNER JOIN user_empresas USING (empresaId) ' +
             'INNER JOIN users USING (userId) ' +
@@ -81,14 +81,15 @@ export const getEmpresasByUser = async (req: Request, res: Response) => {
             }
         );
 
-        if (!empresa) {
+        if (!empresas) {
             res.status(404).json({
                 msg: `No existe una empresa para el usuario con id ${userId}`
             });
         }
 
         res.status(200).json({
-            empresa
+            empresas,
+            total: empresas.length
         });
     } catch (error) {
         res.status(500).json({

@@ -40,7 +40,9 @@ export const signin = async (req: Request, res: Response) => {
 
     // token
     const token: string = jwt.sign({ user }, process.env.TOKEN_SECRET || config.various.OPTIONAL_SEED, {
-        expiresIn: 86400 // 24 hours
+        // expira en 24 hours
+        expiresIn: 86400
+        // expiresIn: 3600
     });
 
     res.json({
