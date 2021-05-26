@@ -10,7 +10,6 @@ export interface EmpresaAttributes {
     estado: boolean
 }
 
-
 export interface EmpresaInterface extends Model<EmpresaInterface, EmpresaAttributes> {
     empresaId: number
     rfc: string

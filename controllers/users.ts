@@ -5,7 +5,7 @@ import { User } from "../models/user";
 import bcrypt from 'bcryptjs';
 import * as Sequelize from 'sequelize'
 import db from '../db/connection';
-import { getEmpresasByUser } from "../controllers/empresa";
+import empresaController from './../controllers/empresa';
 
 export const getUsers = async (req: Request, res: Response) => {
     const { act } = req.params;
@@ -13,9 +13,9 @@ export const getUsers = async (req: Request, res: Response) => {
     try {
         const users = await User.findAll({
             where: {
-              estado
+                estado
             }
-          });
+        });
 
         // const users = await User.findAll({
         //     attributes: ['nombre', 'email'],
@@ -167,47 +167,46 @@ export const putUser = async (req: Request, res: Response) => {
         // });
 
         const updatedUser = await db.transaction(async t => {
+            const userMod = User.build(body);
             await user.update(body, { transaction: t }).then(async (userUpdate) => {
-                let empresasUser;
                 // Buscar y eliminar empresas guardadas del usuario
-                await getEmpresasByUser(req, res).then((empresas) => {
-                    empresasUser = empresas;
-                });
-
-                for (const empresaId of empresasUser) {
-                    const userEmpresa = await UserEmpresa.findOne({
-                        where: {
-                            userId: id, empresaId
-                        }
-                    });
-
-                    if (userEmpresa) {
-                        await userEmpresa.destroy({ transaction: t });
-                    }
-                    // if (!userEmpresa) {
-                    //     return res.status(404).json({
-                    //         msg: `No existe un usuarioEmpresa con el id ${id}`
-                    //     });
-                    // }
-                }
-
-                // Insertar nuevas empresas
-
-                if (body.empresas) {
-
-                    for (const empresaId of body.empresas) {
-                        const userEmpresa = UserEmpresa.build({
-                            userId: userUpdate.userId,
-                            empresaId
+                req.params.userId = req.params.id;
+                const empresas = await empresaController.getEmpresasByUser(req, res);
+                if (empresas && empresas.length > 0) {
+                    for (const empresa of empresas) {
+                        const userEmpresa = await UserEmpresa.findOne({
+                            where: {
+                                userId: id, empresaId: empresa.empresaId
+                            }
                         });
 
-                        await userEmpresa.save({ transaction: t }).then();
-                        // t.commit();
+                        if (userEmpresa) {
+                            await userEmpresa.destroy({ transaction: t });
+                        }
+                        // if (!userEmpresa) {
+                        //     return res.status(404).json({
+                        //         msg: `No existe un usuarioEmpresa con el id ${id}`
+                        //     });
+                        // }
                     }
+
+                    if (body.empresas) {
+
+                        for (const empresaId of body.empresas) {
+                            const userEmpresa = UserEmpresa.build({
+                                userId: userUpdate.userId,
+                                empresaId
+                            });
+
+                            await userEmpresa.save({ transaction: t }).then();
+                            // t.commit();
+                        }
+                    }
+
+                    res.status(200).json({
+                        user: userMod
+                    });
                 }
-            });
-            res.status(200).json({
-                user: updatedUser
             });
         });
 
