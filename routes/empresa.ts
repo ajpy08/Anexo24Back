@@ -98,21 +98,16 @@ router.get('/verificaRFC', verifyToken, (req, res) => {
 });
 
 router.put('/:id', verifyToken, async (req, res) => {
-    const { id } = req.params;
-    const { body } = req;
-
-    // const existeEmpresa = await empresaController.getEmpresa(req, res);
-
-    // if (!existeEmpresa) {
-    //     return res.status(400).json({
-    //         msg: `No existe una empresa con el id ${id}`
-    //     });
-    // }
-
     empresaController.putEmpresa(req, res).then(empresa => {
-        res.status(200).json({
-            empresa
-        });
+        if (empresa) {
+            res.status(200).json({
+                empresa
+            });
+        } else {
+            res.status(500).json({
+                msg: `No se encontró empresa con id ${req.params.id}`
+            });
+        }
     }).catch(error => {
         res.status(500).json({
             msg: `Ocurrio un error ${error}`
@@ -120,6 +115,22 @@ router.put('/:id', verifyToken, async (req, res) => {
     });
 });
 
-router.delete('/:id', verifyToken, empresaController.deleteEmpresa);
+router.delete('/:id', verifyToken, async (req, res) => {
+    empresaController.deleteEmpresa(req, res).then(empresa => {
+        if (empresa) {
+            res.status(200).json({
+                empresa
+            });
+        } else {
+            res.status(500).json({
+                msg: `No se encontró empresa con id ${req.params.id}`
+            });
+        }
+    }).catch(error => {
+        res.status(500).json({
+            msg: `Ocurrio un error ${error}`
+        });
+    });
+});
 
 export default router;
