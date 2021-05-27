@@ -1,11 +1,9 @@
-import { Empresa } from './../models/empresa';
-import { UserEmpresa } from './../models/userEmpresa';
-import { NextFunction, Request, Response } from "express";
+import { UserEmpresa } from '../models/userEmpresa';
+import { Request, Response } from "express";
 import { User } from "../models/user";
 import bcrypt from 'bcryptjs';
-import * as Sequelize from 'sequelize'
 import db from '../db/connection';
-import empresaController from './../controllers/empresa';
+import empresaController from './empresaController';
 
 export const getUsers = async (req: Request, res: Response) => {
     const { act } = req.params;

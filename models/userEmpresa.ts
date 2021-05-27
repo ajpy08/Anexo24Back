@@ -1,7 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import db from "../db/connection";
 import { Empresa } from "./empresa";
-import { User } from "./user";
 
 export interface UserEmpresaAttributes {
     userId: number

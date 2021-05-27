@@ -1,5 +1,4 @@
 import { UserEmpresa } from './userEmpresa';
-import { Empresa } from './empresa';
 import { DataTypes, Model } from 'sequelize'
 import db from '../db/connection';
 

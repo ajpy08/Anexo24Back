@@ -1,6 +1,6 @@
-import { deleteUser, getUser, getUsers, postUser, putUser } from '../controllers/users';
+import { deleteUser, getUser, getUsers, postUser, putUser } from '../controllers/usersController';
 import { Router } from 'express';
-import { verifyToken } from '../controllers/auth';
+import { verifyToken } from '../controllers/authController';
 
 const router = Router();
 

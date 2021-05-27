@@ -1,4 +1,4 @@
-import { Empresa } from './../models/empresa';
+import { Empresa } from '../models/empresa';
 import { Request, Response } from "express";
 import { QueryTypes } from "sequelize";
 import db from "../db/connection";
