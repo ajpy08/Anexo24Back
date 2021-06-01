@@ -1,10 +1,10 @@
 import { Empresa } from '../models/empresa';
 import { Request, Response } from "express";
-import { QueryTypes } from "sequelize";
+import { QueryTypes, Transaction } from "sequelize";
 import db from "../db/connection";
 
 export = {
-    getEmpresas: async (req: Request, res: Response) => {
+    getEmpresas: (req: Request, res: Response) => {
         return db.query('SELECT * from empresas', {
             type: QueryTypes.SELECT,
             model: Empresa
@@ -21,7 +21,7 @@ export = {
             }
         );
     },
-    getEmpresasByUser: (req: Request, res: Response) => {
+    getEmpresasByUser: (req: Request, res: Response, t?: Transaction) => {
         const { userId } = req.params;
         return db.query(
             'SELECT empresas.* FROM empresas ' +
@@ -31,7 +31,8 @@ export = {
             {
                 replacements: { userId },
                 type: QueryTypes.SELECT,
-                model: Empresa
+                model: Empresa,
+                transaction: t
             }
         );
     },

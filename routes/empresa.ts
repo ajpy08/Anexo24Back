@@ -1,10 +1,11 @@
 import empresaController from '../controllers/empresaController';
 import { Router } from 'express';
 import { verifyToken } from '../controllers/authController';
+import { Request, Response } from "express";
 
 const router = Router();
 
-router.get('/', verifyToken, (req, res) => {
+router.get('/', verifyToken, (req: Request, res: Response) => {
     empresaController.getEmpresas(req, res).then(empresas => {
         if (empresas) {
             res.status(200).json({
@@ -23,7 +24,7 @@ router.get('/', verifyToken, (req, res) => {
     });
 });
 
-router.get('/:id', verifyToken, (req, res) => {
+router.get('/:id', verifyToken, (req: Request, res: Response) => {
     empresaController.getEmpresa(req, res).then(empresa => {
         if (empresa) {
             res.status(200).json({
@@ -37,7 +38,7 @@ router.get('/:id', verifyToken, (req, res) => {
     });
 });
 
-router.get('/user/:userId', verifyToken, (req, res) => {
+router.get('/user/:userId', verifyToken, (req: Request, res: Response) => {
     empresaController.getEmpresasByUser(req, res).then(empresas => {
         if (empresas) {
             res.status(200).json({
@@ -56,7 +57,7 @@ router.get('/user/:userId', verifyToken, (req, res) => {
     });
 });
 
-router.post('/', verifyToken, async (req, res) => {
+router.post('/', verifyToken, async (req: Request, res: Response) => {
     const { body } = req;
 
     const existeRFC = await empresaController.verificaRFC(req, res);
@@ -78,7 +79,7 @@ router.post('/', verifyToken, async (req, res) => {
     });
 });
 
-router.get('/verificaRFC', verifyToken, (req, res) => {
+router.get('/verificaRFC', verifyToken, (req: Request, res: Response) => {
     empresaController.verificaRFC(req, res).then(empresa => {
         if (empresa) {
             res.status(200).json({
@@ -96,14 +97,14 @@ router.get('/verificaRFC', verifyToken, (req, res) => {
     });
 });
 
-router.put('/:id', verifyToken, async (req, res) => {
+router.put('/:id', verifyToken, (req: Request, res: Response) => {
     empresaController.putEmpresa(req, res).then(empresa => {
         if (empresa) {
             res.status(200).json({
                 empresa
             });
         } else {
-            res.status(500).json({
+            res.status(400).json({
                 msg: `No se encontró empresa con id ${req.params.id}`
             });
         }
@@ -114,14 +115,14 @@ router.put('/:id', verifyToken, async (req, res) => {
     });
 });
 
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/:id', verifyToken, (req: Request, res: Response) => {
     empresaController.deleteEmpresa(req, res).then(empresa => {
         if (empresa) {
             res.status(200).json({
                 empresa
             });
         } else {
-            res.status(500).json({
+            res.status(400).json({
                 msg: `No se encontró empresa con id ${req.params.id}`
             });
         }

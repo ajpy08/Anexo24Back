@@ -10,7 +10,7 @@ export interface UserAttributes {
     estado: boolean
 }
 
-export interface UserModel extends Model<UserModel, UserAttributes> {
+export interface UserInterface extends Model<UserInterface, UserAttributes> {
     userId: number
     nombre: string
     email: string
@@ -25,7 +25,7 @@ export interface UserViewModel {
     email: string
 }
 
-export const User = db.define<UserModel, UserAttributes>('user', {
+export const User = db.define<UserInterface, UserAttributes>('user', {
     userId: {
         type: DataTypes.UUID,
         autoIncrement: true,
