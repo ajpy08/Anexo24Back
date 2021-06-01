@@ -1,0 +1,12 @@
+{
+    "db": {
+        "DATABASE_HOST": "localhost",
+        "DATABASE_PORT": 3307,
+        "DATABASE_USER": "root",
+        "DATABASE_PASSWORD": "fmat*0348",
+        "DATABASE_NAME": "anexo24"
+    },
+    "various": {
+        "OPTIONAL_SEED": "@nexo24"
+    }
+}
