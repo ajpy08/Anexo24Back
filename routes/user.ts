@@ -135,8 +135,7 @@ router.put('/:id', verifyToken, async (req: Request, res: Response) => {
 });
 
 // router.delete('/:id', verifyToken, deleteUser);
-router.put('/delete/:id', verifyToken, async (req: Request, res: Response) => {
-
+router.delete('/:id', verifyToken, async (req: Request, res: Response) => {
     deleteUser(req, res).then(user => {
         if (user) {
             res.status(200).json({

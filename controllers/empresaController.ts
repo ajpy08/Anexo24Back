@@ -5,7 +5,11 @@ import db from "../db/connection";
 
 export = {
     getEmpresas: (req: Request, res: Response) => {
-        return db.query('SELECT * from empresas', {
+        const { activo } = req.params;
+        const estado = activo === 'true' ? true : false;
+        return db.query(
+            'SELECT * from empresas WHERE estado = :estado', {
+            replacements: { estado },
             type: QueryTypes.SELECT,
             model: Empresa
         });
@@ -72,6 +76,7 @@ export = {
         return empresa.update(body);
     },
     deleteEmpresa: async (req: Request, res: Response) => {
+        const { activo } = req.body;
         const { id } = req.params;
 
         const empresa = await Empresa.findByPk(id);
@@ -81,6 +86,6 @@ export = {
 
         // await empresa?.destroy();
 
-        return await empresa?.update({ estado: false });
+        return await empresa?.update({ estado: activo });
     }
 }

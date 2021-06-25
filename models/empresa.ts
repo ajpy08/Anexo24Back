@@ -6,14 +6,16 @@ import { UserEmpresa } from './userEmpresa';
 export interface EmpresaAttributes {
     empresaId: number
     rfc: string
-    nombre: string
+    nombre: string,
+    immex: string,
     estado: boolean
 }
 
 export interface EmpresaInterface extends Model<EmpresaInterface, EmpresaAttributes> {
     empresaId: number
     rfc: string
-    nombre: string
+    nombre: string,
+    immex: string,
     estado: boolean
     createdAt: string
     updatedAt: string
@@ -27,6 +29,7 @@ export const Empresa = db.define<EmpresaInterface, EmpresaAttributes>('empresa',
     },
     rfc: DataTypes.STRING(13),
     nombre: DataTypes.STRING,
+    immex: DataTypes.STRING,
     estado: DataTypes.BOOLEAN
 });
 
