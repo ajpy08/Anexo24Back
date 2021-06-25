@@ -178,7 +178,6 @@ export const putUser = async (req: Request, res: Response, t?: Transaction) => {
 }
 
 export const deleteUser = async (req: Request, res: Response) => {
-    const { id } = req.params;
     const { activo } = req.body;
 
     const user = await getUser(req,res);

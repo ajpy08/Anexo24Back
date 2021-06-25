@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 
 const router = Router();
 
-router.get('/', verifyToken, (req: Request, res: Response) => {
+router.get('/:activo', verifyToken, (req: Request, res: Response) => {
     empresaController.getEmpresas(req, res).then(empresas => {
         if (empresas) {
             res.status(200).json({
@@ -24,11 +24,11 @@ router.get('/', verifyToken, (req: Request, res: Response) => {
     });
 });
 
-router.get('/:id', verifyToken, (req: Request, res: Response) => {
+router.get('/empresa/:id', verifyToken, (req: Request, res: Response) => {
     empresaController.getEmpresa(req, res).then(empresa => {
         if (empresa) {
             res.status(200).json({
-                empresa
+                empresa: empresa[0]
             });
         } else {
             res.status(400).json({
