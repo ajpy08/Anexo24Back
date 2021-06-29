@@ -52,7 +52,8 @@ export const signin = async (req: Request, res: Response) => {
 }
 
 export const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.query.token as string;
+    // const token = req.query.token as string;
+    const token = req.headers.token as string;
 
     // if (token === '') {
     //     return res.status(403).send()

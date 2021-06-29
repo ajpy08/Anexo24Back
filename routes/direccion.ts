@@ -64,7 +64,6 @@ router.post('/', verifyToken, async (req: Request, res: Response) => {
         res.status(200).json({
             direccion
         });
-
     }).catch(error => {
         t.rollback();
         res.status(500).json({
@@ -92,17 +91,16 @@ router.put('/:id', verifyToken, async (req: Request, res: Response) => {
 
 router.delete('/:id', verifyToken, async (req: Request, res: Response) => {
     deleteDireccion(req, res).then(direccion => {
-        console.log(direccion);
 
-        // if (direccion) {
-        //     res.status(200).json({
-        //         direccion
-        //     });
-        // } else {
-        //     res.status(400).json({
-        //         msg: `No se encontró direccion con id ${req.params.id}`
-        //     });
-        // }
+        if (direccion !== undefined) {
+            res.status(200).json({
+                direccion
+            });
+        } else {
+            return res.status(400).json({
+                msg: `No se encontró direccion con id ${req.params.id}`
+            });
+        }
     }).catch(error => {
         res.status(500).json({
             msg: `Ocurrio un error ${error}`
