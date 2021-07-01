@@ -9,9 +9,10 @@ export interface DireccionAttributes {
     cp: string
     colonia: string,
     domicilioFiscal: boolean,
-    tipo: boolean,
+    tipo: number,
     estado: boolean,
     empresaId: number,
+    entidadId: number,
 }
 
 export interface DireccionInterface extends Model<DireccionInterface, DireccionAttributes> {
@@ -21,11 +22,12 @@ export interface DireccionInterface extends Model<DireccionInterface, DireccionA
     cp: string,
     colonia: string,
     domicilioFiscal: boolean,
-    tipo: boolean,
+    tipo: number,
     estado: boolean,
     createdAt: string,
     updatedAt: string,
     empresaId: number,
+    entidadId: number,
 }
 
 export interface DireccionViewModel {
@@ -44,9 +46,12 @@ export const Direccion = db.define<DireccionInterface, DireccionAttributes>('dir
     cp: { type: DataTypes.STRING, allowNull: false },
     colonia: { type: DataTypes.STRING, allowNull: false },
     domicilioFiscal: DataTypes.BOOLEAN,
-    tipo: DataTypes.BOOLEAN,
+    tipo: DataTypes.NUMBER,
     estado: DataTypes.BOOLEAN,
     empresaId: {
+        type: DataTypes.UUID
+    },
+    entidadId: {
         type: DataTypes.UUID
     },
 });

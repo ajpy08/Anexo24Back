@@ -3,6 +3,7 @@ import authRoutes from '../routes/auth';
 import userRoutes from '../routes/user';
 import empresaRoutes from '../routes/empresa';
 import direccionRoutes from '../routes/direccion';
+import entidadesRoutes from '../routes/entidades';
 import cors from 'cors'
 import db from '../db/connection';
 
@@ -13,7 +14,8 @@ class Server {
         auth: '/api/auth',
         usuarios: '/api/users',
         empresas: '/api/empresas',
-        direcciones: '/api/direcciones'
+        direcciones: '/api/direcciones',
+        entidades: '/api/entidades'
     }
 
     constructor() {
@@ -51,6 +53,7 @@ class Server {
         this.app.use(this.apiPaths.usuarios, userRoutes);
         this.app.use(this.apiPaths.empresas, empresaRoutes);
         this.app.use(this.apiPaths.direcciones, direccionRoutes);
+        this.app.use(this.apiPaths.entidades, entidadesRoutes);
     }
 
     listen() {

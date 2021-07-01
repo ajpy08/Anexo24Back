@@ -1,5 +1,4 @@
-import { getDireccionesByEmpresa } from './../controllers/direccionController';
-import { deleteDireccion, getDireccion, getDirecciones, postDireccion, putDireccion } from '../controllers/direccionController';
+import { deleteDireccion, getDireccion, getDirecciones, postDireccion, putDireccion, getDireccionesByEmpresa } from '../controllers/direccionController';
 import { Router } from 'express';
 import { verifyToken } from '../controllers/authController';
 import { Request, Response } from "express";

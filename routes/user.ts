@@ -109,17 +109,17 @@ router.put('/:id', verifyToken, async (req: Request, res: Response) => {
                     await userEmpresa.destroy({ transaction: t });
                 }
             }
+        }
 
-            if (body.empresas && userUpdate) {
+        if (body.empresas && userUpdate) {
 
-                for (const empresaId of body.empresas) {
-                    const userEmpresa = UserEmpresa.build({
-                        userId: userUpdate.userId,
-                        empresaId
-                    });
+            for (const empresaId of body.empresas) {
+                const userEmpresa = UserEmpresa.build({
+                    userId: userUpdate.userId,
+                    empresaId
+                });
 
-                    await userEmpresa.save({ transaction: t });
-                }
+                await userEmpresa.save({ transaction: t });
             }
         }
         t.commit();
