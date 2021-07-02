@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { verifyToken } from "../controllers/authController";
-import { getEntidades } from './../controllers/entidadesController';
+import { getEntidades } from '../controllers/entidadeController';
 
 const router = Router();
 

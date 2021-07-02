@@ -1,5 +1,5 @@
-import { verificaEmail } from './../controllers/usersController';
-import { deleteUser, getUser, getUsers, postUser, putUser } from '../controllers/usersController';
+import { verificaEmail } from '../controllers/userController';
+import { deleteUser, getUser, getUsers, postUser, putUser } from '../controllers/userController';
 import { Router } from 'express';
 import { verifyToken } from '../controllers/authController';
 import { Request, Response } from "express";
@@ -59,7 +59,7 @@ router.post('/', verifyToken, async (req: Request, res: Response) => {
 
     // Transaccion Manual
     const t = await db.transaction();
-    await postUser(req, res, t).then(async user => {
+    postUser(req, res, t).then(async user => {
         if (body.empresas) {
 
             for (const empresaId of body.empresas) {
@@ -71,7 +71,7 @@ router.post('/', verifyToken, async (req: Request, res: Response) => {
                 await userEmpresa.save({ transaction: t });
             }
         }
-        t.commit();
+        await t.commit();
         res.status(200).json({
             user: body
         });
@@ -92,7 +92,7 @@ router.put('/:id', verifyToken, async (req: Request, res: Response) => {
     const t = await db.transaction();
     const userMod = User.build(body);
     userMod.userId = parseInt(id, 10);
-    await putUser(req, res, t).then(async userUpdate => {
+    putUser(req, res, t).then(async userUpdate => {
         // Buscar y eliminar empresas guardadas del usuario
         req.params.userId = req.params.id;
         const empresas = await empresaController.getEmpresasByUser(req, res, t);
@@ -122,7 +122,7 @@ router.put('/:id', verifyToken, async (req: Request, res: Response) => {
                 await userEmpresa.save({ transaction: t });
             }
         }
-        t.commit();
+        await t.commit();
         res.status(200).json({
             user: userMod
         });

@@ -41,7 +41,7 @@ export interface AgenteAduanalInterface extends Model<AgenteAduanalInterface, Ag
 //     email: string
 // }
 
-export const AgenteAduanal = db.define<AgenteAduanalInterface, AgenteAduanalAttributes>('agenteAduanal', {
+export const AgenteAduanal = db.define<AgenteAduanalInterface, AgenteAduanalAttributes>('agentes_aduanales', {
     agenteAduanalId: {
         type: DataTypes.UUID,
         autoIncrement: true,
