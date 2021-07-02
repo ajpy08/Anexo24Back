@@ -6,14 +6,15 @@ import db from '../db/connection';
 import empresaController from './empresaController';
 import { Transaction } from 'sequelize/types';
 
-export const getUsers = (req: Request, res: Response) => {
+export const getUsers = (req: Request, res: Response, t?: Transaction) => {
     const { act } = req.params;
     const estado = act === 'true' ? true : false;
 
     return User.findAll({
         where: {
             estado
-        }
+        },
+        transaction: t,
     });
 
     /* #region  Otra forma */
@@ -34,17 +35,18 @@ export const getUsers = (req: Request, res: Response) => {
     /* #endregion */
 }
 
-export const getUser = (req: Request, res: Response) => {
+export const getUser = (req: Request, res: Response, t?: Transaction) => {
     const { id } = req.params;
-    return User.findByPk(id);
+    return User.findByPk(id, { transaction: t });
 }
 
-export const verificaEmail = (req: Request, res: Response) => {
+export const verificaEmail = (req: Request, res: Response, t?: Transaction) => {
     const { body } = req;
     return User.findOne({
         where: {
             email: body.email
-        }
+        },
+        transaction: t
     });
 };
 
@@ -177,7 +179,7 @@ export const putUser = async (req: Request, res: Response, t?: Transaction) => {
     /* #endregion */
 }
 
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response, t?: Transaction) => {
     const { activo } = req.body;
 
     const user = await getUser(req,res);
@@ -188,6 +190,6 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     // await user?.destroy();
 
-    return user?.update({ estado: activo });
+    return user?.update({ estado: activo }, { transaction: t });
 }
 

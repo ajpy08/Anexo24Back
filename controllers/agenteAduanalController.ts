@@ -3,20 +3,21 @@ import { Request, Response } from "express";
 import db from '../db/connection';
 import { Transaction } from 'sequelize/types';
 
-export const getAgentesAduanales = (req: Request, res: Response) => {
+export const getAgentesAduanales = (req: Request, res: Response, t?: Transaction) => {
     const { act } = req.params;
     const estado = act === 'true' ? true : false;
 
     return AgenteAduanal.findAll({
         where: {
             estado
-        }
+        },
+        transaction: t
     });
 }
 
-export const getAgenteAduanal = (req: Request, res: Response) => {
+export const getAgenteAduanal = (req: Request, res: Response, t?: Transaction) => {
     const { id } = req.params;
-    return AgenteAduanal.findByPk(id);
+    return AgenteAduanal.findByPk(id, { transaction: t });
 }
 
 export const postAgenteAduanal = async (req: Request, res: Response, t?: Transaction) => {
@@ -37,7 +38,7 @@ export const putAgenteAduanal = async (req: Request, res: Response, t?: Transact
     }
 }
 
-export const deleteAgenteAduanal = async (req: Request, res: Response) => {
+export const deleteAgenteAduanal = async (req: Request, res: Response, t?: Transaction) => {
     const { activo } = req.body;
 
     const agente = await getAgenteAduanal(req,res);
@@ -46,6 +47,6 @@ export const deleteAgenteAduanal = async (req: Request, res: Response) => {
         return;
     }
 
-    return agente?.update({ estado: activo });
+    return agente?.update({ estado: activo }, { transaction: t });
 }
 
