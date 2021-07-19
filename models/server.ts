@@ -7,10 +7,11 @@ import entidadRoutes from '../routes/entidad';
 import agentesRoutes from '../routes/agenteAduanal';
 import cors from 'cors'
 import db from '../db/connection';
+import config from '../config/config.json';
 
 class Server {
     private app: Application;
-    private port: string;
+    private port: number;
     private apiPaths = {
         auth: '/api/auth',
         usuarios: '/api/users',
@@ -22,7 +23,7 @@ class Server {
 
     constructor() {
         this.app = express();
-        this.port = process.env.PORT || '8000';
+        this.port = parseInt(process.env.SERVER_PORT as string, 10) || 8000;
 
         // Metodos iniciales
         this.dbConnection();

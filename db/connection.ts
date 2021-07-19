@@ -1,23 +1,11 @@
 import { Sequelize } from 'sequelize';
 import config from '../config/config.json';
 
-const db = new Sequelize(config.db.DATABASE_NAME, config.db.DATABASE_USER, config.db.DATABASE_PASSWORD, {
-    host: config.db.DATABASE_HOST,
+const db = new Sequelize(process.env.DATABASE_NAME as string, process.env.DATABASE_USER as string,  process.env.DATABASE_PASSWORD, {
+    host: process.env.DATABASE_HOST,
     dialect: 'mysql',
     logging: console.log,
-    port: config.db.DATABASE_PORT,
+    port: parseInt(process.env.DATABASE_PORT as string, 10) || 3000,
 });
-
-// Empresa.belongsToMany(User, {
-//     through: "user_empresa",
-//     as: "users",
-//     foreignKey: "empresa_id",
-// });
-
-// User.belongsToMany(Empresa, {
-//     through: "user_empresa",
-//     as: "empresas",
-//     foreignKey: "user_id",
-// });
 
 export default db;
