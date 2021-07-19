@@ -11,10 +11,11 @@ export interface AgenteAduanalAttributes {
     numero: string,
     cp: string,
     colonia: string,
-    domicilioFiscal: boolean,
-    tipo: number,
+    // domicilioFiscal: boolean,
+    // tipo: number,
     estado: boolean,
-    userAltaId: number
+    userAltaId: number,
+    entidadId: number,
 }
 
 export interface AgenteAduanalInterface extends Model<AgenteAduanalInterface, AgenteAduanalAttributes> {
@@ -27,12 +28,13 @@ export interface AgenteAduanalInterface extends Model<AgenteAduanalInterface, Ag
     numero: string,
     cp: string,
     colonia: string,
-    domicilioFiscal: boolean,
-    tipo: number,
+    // domicilioFiscal: boolean,
+    // tipo: number,
     estado: boolean,
     userAltaId: number,
     createdAt: string,
     updatedAt: string,
+    entidadId: number,
 }
 
 // export interface AgenteAduanalViewModel {
@@ -55,10 +57,13 @@ export const AgenteAduanal = db.define<AgenteAduanalInterface, AgenteAduanalAttr
     numero: { type: DataTypes.STRING, allowNull: false, unique: true },
     cp: { type: DataTypes.STRING, allowNull: false },
     colonia: { type: DataTypes.STRING, allowNull: false },
-    domicilioFiscal: DataTypes.BOOLEAN,
-    tipo: DataTypes.NUMBER,
+    // domicilioFiscal: DataTypes.BOOLEAN,
+    // tipo: DataTypes.NUMBER,
     estado: DataTypes.BOOLEAN,
     userAltaId: {
+        type: DataTypes.UUID
+    },
+    entidadId: {
         type: DataTypes.UUID
     },
 });
