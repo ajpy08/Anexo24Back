@@ -4,24 +4,26 @@ import { QueryTypes, Transaction } from "sequelize";
 import db from "../db/connection";
 
 export = {
-    getEmpresas: (req: Request, res: Response) => {
+    getEmpresas: (req: Request, res: Response, t?: Transaction) => {
         const { activo } = req.params;
         const estado = activo === 'true' ? true : false;
         return db.query(
             'SELECT * from empresas WHERE estado = :estado', {
             replacements: { estado },
             type: QueryTypes.SELECT,
-            model: Empresa
+            model: Empresa,
+            transaction: t
         });
     },
-    getEmpresa: (req: Request, res: Response) => {
+    getEmpresa: (req: Request, res: Response, t?: Transaction) => {
         const { id } = req.params;
         // return Empresa.findByPk(id);
         return db.query(
             'SELECT * FROM empresas WHERE empresaId = :id',
             {
                 replacements: { id },
-                type: QueryTypes.SELECT
+                type: QueryTypes.SELECT,
+                transaction: t
             }
         );
     },
@@ -40,10 +42,10 @@ export = {
             }
         );
     },
-    postEmpresa: (req: Request, res: Response) => {
+    postEmpresa: (req: Request, res: Response, t?: Transaction) => {
         const { body } = req;
         const empresa = Empresa.build(body);
-        return empresa.save();
+        return empresa.save({ transaction: t });
 
         /* #region  Otra forma */
         // return db.query(
@@ -56,15 +58,16 @@ export = {
         // });
         /* #endregion */
     },
-    verificaRFC: (req: Request, res: Response) => {
+    verificaRFC: (req: Request, res: Response, t?: Transaction) => {
         const { body } = req;
         return Empresa.findOne({
             where: {
                 rfc: body.rfc
-            }
+            },
+            transaction: t
         });
     },
-    putEmpresa: async (req: Request, res: Response) => {
+    putEmpresa: async (req: Request, res: Response, t?: Transaction) => {
         const { id } = req.params;
         const { body } = req;
 
@@ -73,9 +76,9 @@ export = {
             return
         }
 
-        return empresa.update(body);
+        return empresa.update(body, {transaction: t});
     },
-    deleteEmpresa: async (req: Request, res: Response) => {
+    deleteEmpresa: async (req: Request, res: Response, t?: Transaction) => {
         const { activo } = req.body;
         const { id } = req.params;
 
@@ -86,6 +89,6 @@ export = {
 
         // await empresa?.destroy();
 
-        return await empresa?.update({ estado: activo });
+        return await empresa?.update({ estado: activo }, {transaction: t});
     }
 }

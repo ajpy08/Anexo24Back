@@ -2,6 +2,9 @@ import express, { Application } from 'express'
 import authRoutes from '../routes/auth';
 import userRoutes from '../routes/user';
 import empresaRoutes from '../routes/empresa';
+import direccionRoutes from '../routes/direccion';
+import entidadRoutes from '../routes/entidad';
+import agentesRoutes from '../routes/agenteAduanal';
 import cors from 'cors'
 import db from '../db/connection';
 
@@ -12,6 +15,9 @@ class Server {
         auth: '/api/auth',
         usuarios: '/api/users',
         empresas: '/api/empresas',
+        direcciones: '/api/direcciones',
+        entidades: '/api/entidades',
+        agentes: '/api/agentesAduanales'
     }
 
     constructor() {
@@ -48,6 +54,9 @@ class Server {
         this.app.use(this.apiPaths.auth, authRoutes);
         this.app.use(this.apiPaths.usuarios, userRoutes);
         this.app.use(this.apiPaths.empresas, empresaRoutes);
+        this.app.use(this.apiPaths.direcciones, direccionRoutes);
+        this.app.use(this.apiPaths.entidades, entidadRoutes);
+        this.app.use(this.apiPaths.agentes, agentesRoutes);
     }
 
     listen() {
