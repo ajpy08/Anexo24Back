@@ -72,7 +72,7 @@ router.post('/', verifyToken, async (req: Request, res: Response) => {
             }
         }
         await t.commit();
-        res.status(200).json({
+        res.status(201).json({
             user: body
         });
 
