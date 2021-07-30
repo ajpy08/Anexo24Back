@@ -1,11 +1,11 @@
-import request from "supertest";
-import app from '../models/server';
+// import request from "supertest";
+// import app from '../models/server';
 
-test('Should get all items', async() => {
-    await request(app)
-    .get('/user')
-    .expect(200)
-})
+// test('Should get all items', async() => {
+//     await request(app)
+//     .get('/user')
+//     .expect(200)
+// })
 
 // test('Should create a new user', async () => {
 //     await request(app).post('/users')
